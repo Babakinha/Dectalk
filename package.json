@@ -3,6 +3,13 @@
     "version": "1.0.0",
     "description": "Aieou!",
     "author": "Babakinha",
+    "keywords": [
+        "typescript",
+        "text-to-speech",
+        "dectalk",
+        "wav",
+        "wave"
+    ],
 
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
