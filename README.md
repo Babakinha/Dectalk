@@ -24,7 +24,7 @@ import { say } from 'dectalk';
 (async () => {
 
     const WavData: Buffer = await say("Hello World");
-    writeFileSync('Hello.wav', WavData)
+    writeFileSync('Hello.wav', WavData);
+    
 })();
-
 ```
