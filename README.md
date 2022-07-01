@@ -1,5 +1,7 @@
 # Dectalk
-A Simple package for using Dectalk
+A Simple package for using Dectalk (_Moonbase alpha voice_)
+
+_only works on linux though_
 # Installation
 ```sh-session
 npm install dectalk
