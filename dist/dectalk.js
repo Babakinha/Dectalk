@@ -37,8 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.say = exports.WaveEncoding = void 0;
-var child = require("child_process");
-var fs = require("fs");
+var child_process_1 = require("child_process");
+var fs_1 = require("fs");
 var tmp = require("tmp");
 var WaveEncoding;
 (function (WaveEncoding) {
@@ -56,15 +56,22 @@ function say(content, options) {
                         if (options.WaveEncoding)
                             args.push('-e', options.WaveEncoding.toString());
                         if (options.SpeakRate)
-                            args.push('-r', options.WaveEncoding.toString());
-                        if (options.SpeakNumber)
-                            args.push('-s', options.SpeakNumber.toString());
+                            args.push('-r', options.SpeakRate.toString());
+                        if (options.SpeakerNumber)
+                            args.push('-s', options.SpeakerNumber.toString());
+                        if (options.EnableCommands)
+                            content = "[:PHONE ON]" + content;
+                    }
+                    else {
+                        //Defaults
+                        // EnableCommands
+                        content = "[:PHONE ON]" + content;
                     }
                     args.push('-a', content);
                     args.push('-fo', file.name);
-                    var dec = child.spawn(__dirname + '/../dtalk/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
+                    var dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     dec.on('close', function () {
-                        res(fs.readFileSync(file.name));
+                        res((0, fs_1.readFileSync)(file.name));
                     });
                 })];
         });
