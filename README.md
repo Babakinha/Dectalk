@@ -6,6 +6,8 @@ _only works on linux though_
 ```sh-session
 npm install dectalk
 ```
+
+_see [notes](#notes) if it doesn't work for you_ 
 # Example
 Javascript:
 ```js
@@ -30,3 +32,13 @@ import { say } from 'dectalk';
     
 })();
 ```
+
+## Notes
+On my arch linux server (x86_64)
+i had to install some dependencies
+```sh-session
+yay -S gcc-multilib lib32-glibc
+```
+since i was running 64-bit and the binary is 32-bit
+
+but on ubuntu i didnt (it must have them pre installed)
