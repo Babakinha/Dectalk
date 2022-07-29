@@ -1,7 +1,6 @@
 # Dectalk
-A Simple package for using Dectalk (_Moonbase alpha voice_)
+A Simple package for using Dectalk (_Moonbase alpha voice_)  
 
-_only works on linux though_
 # Installation
 ```sh-session
 npm install dectalk
@@ -34,6 +33,11 @@ import { say } from 'dectalk';
 ```
 
 ## Notes
+### Windows
+Windows support was added recently, 
+if you have any problems dont be afraid to make an issue
+
+### Linux
 On my arch linux server (x86_64)
 i had to install some dependencies
 ```sh-session

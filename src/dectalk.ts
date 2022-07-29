@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
-import { readFileSync } from 'fs'
-import * as tmp from 'tmp'
+import { readFileSync } from 'fs';
+import * as tmp from 'tmp';
+import * as os from 'os';
 
 export enum WaveEncoding {
     PCM_16bits_MONO_11KHz = 1,
@@ -10,6 +11,7 @@ export enum WaveEncoding {
 
 type DecOptions = {
     /**
+     * (_Linux only_)
      * The encoding the wav file is
      *
      * PCM_16bits_MONO_11KHz = 1,
@@ -21,11 +23,13 @@ type DecOptions = {
     WaveEncoding?: WaveEncoding,
 
     /**
+     * (_Linux only_)
      * The speed that he talks
      */
     SpeakRate?: number,
 
     /**
+     * (_Linux only_)
      * The voice of who talks
      *
      * Here is what i think they are
@@ -58,28 +62,50 @@ type DecOptions = {
 
 export async function say(content:string, options?: DecOptions): Promise<Buffer> {
     return new Promise((res, rej) => {
-        const file = tmp.fileSync({prefix: 'dectalk-', postfix: '.wav'});
+        const file = tmp.fileSync({prefix: 'dectalk', postfix: '.wav'});
+        
+        let dec;
+        //Windows
+        if(os.platform() == "win32") {
+                var args: string[] = [];
+                if(options) {
+                        if(options.EnableCommands)
+                                content = "[:PHONE ON]" + content;
+                }else {
+                        //Defaults
+                        // EnableCommands
+                        content = "[:PHONE ON]" + content;
+                }
+                args.push('-w', file.name);
+                //args.push('-d', __dirname + "/../dtalk/dtalk_us.dic");
+                args.push(content);
 
-        var args: string[] = [];
-        if(options) {
-            if(options.WaveEncoding)
-                args.push('-e', options.WaveEncoding.toString());
-            if(options.SpeakRate)
-                    args.push('-r', options.SpeakRate.toString());
-            if(options.SpeakerNumber)
-                args.push('-s', options.SpeakerNumber.toString());
-            if(options.EnableCommands)
-                content = "[:PHONE ON]" + content;
-        }else {
-            //Defaults
-            // EnableCommands
-            content = "[:PHONE ON]" + content;
+
+                dec = spawn(__dirname + '/../dtalk/windows/say.exe', args, {cwd: __dirname + '/../dtalk/windows'});
         }
-        args.push('-a', content);
-        args.push('-fo', file.name);
-        
-        
-        const dec = spawn(__dirname + '/../dtalk/say_demo_us', args, {cwd: __dirname + '/../dtalk'});
+        //Linux / Others
+        else {
+                var args: string[] = [];
+                if(options) {
+                        if(options.WaveEncoding)
+                                args.push('-e', options.WaveEncoding.toString());
+                        if(options.SpeakRate)
+                                args.push('-r', options.SpeakRate.toString());
+                        if(options.SpeakerNumber)
+                                args.push('-s', options.SpeakerNumber.toString());
+                        if(options.EnableCommands)
+                                content = "[:PHONE ON]" + content;
+                }else {
+                        //Defaults
+                        // EnableCommands
+                        content = "[:PHONE ON]" + content;
+                }
+                args.push('-a', content);
+                args.push('-fo', file.name);
+
+
+                dec = spawn(__dirname + '/../dtalk/linux/say_demo_us', args, {cwd: __dirname + '/../dtalk'});
+        }
 
         dec.on('close', () => {
             res(readFileSync(file.name));
