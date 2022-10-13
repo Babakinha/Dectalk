@@ -6,6 +6,7 @@ export declare enum WaveEncoding {
 }
 declare type DecOptions = {
     /**
+     * (_Linux only_)
      * The encoding the wav file is
      *
      * PCM_16bits_MONO_11KHz = 1,
@@ -16,10 +17,12 @@ declare type DecOptions = {
      */
     WaveEncoding?: WaveEncoding;
     /**
+     * (_Linux only_)
      * The speed that he talks
      */
     SpeakRate?: number;
     /**
+     * (_Linux only_)
      * The voice of who talks
      *
      * Here is what i think they are

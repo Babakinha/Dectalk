@@ -40,6 +40,7 @@ exports.say = exports.WaveEncoding = void 0;
 var child_process_1 = require("child_process");
 var fs_1 = require("fs");
 var tmp = require("tmp");
+var os = require("os");
 var WaveEncoding;
 (function (WaveEncoding) {
     WaveEncoding[WaveEncoding["PCM_16bits_MONO_11KHz"] = 1] = "PCM_16bits_MONO_11KHz";
@@ -50,26 +51,47 @@ function say(content, options) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             return [2 /*return*/, new Promise(function (res, rej) {
-                    var file = tmp.fileSync({ prefix: 'dectalk-', postfix: '.wav' });
-                    var args = [];
-                    if (options) {
-                        if (options.WaveEncoding)
-                            args.push('-e', options.WaveEncoding.toString());
-                        if (options.SpeakRate)
-                            args.push('-r', options.SpeakRate.toString());
-                        if (options.SpeakerNumber)
-                            args.push('-s', options.SpeakerNumber.toString());
-                        if (options.EnableCommands)
+                    var file = tmp.fileSync({ prefix: 'dectalk', postfix: '.wav' });
+                    var dec;
+                    //Windows
+                    if (os.platform() == "win32") {
+                        var args = [];
+                        if (options) {
+                            if (options.EnableCommands)
+                                content = "[:PHONE ON]" + content;
+                        }
+                        else {
+                            //Defaults
+                            // EnableCommands
                             content = "[:PHONE ON]" + content;
+                        }
+                        args.push('-w', file.name);
+                        //args.push('-d', __dirname + "/../dtalk/dtalk_us.dic");
+                        args.push(content);
+                        dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/windows/say.exe', args, { cwd: __dirname + '/../dtalk/windows' });
                     }
+                    //Linux / Others
                     else {
-                        //Defaults
-                        // EnableCommands
-                        content = "[:PHONE ON]" + content;
+                        var args = [];
+                        if (options) {
+                            if (options.WaveEncoding)
+                                args.push('-e', options.WaveEncoding.toString());
+                            if (options.SpeakRate)
+                                args.push('-r', options.SpeakRate.toString());
+                            if (options.SpeakerNumber)
+                                args.push('-s', options.SpeakerNumber.toString());
+                            if (options.EnableCommands)
+                                content = "[:PHONE ON]" + content;
+                        }
+                        else {
+                            //Defaults
+                            // EnableCommands
+                            content = "[:PHONE ON]" + content;
+                        }
+                        args.push('-a', content);
+                        args.push('-fo', file.name);
+                        dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     }
-                    args.push('-a', content);
-                    args.push('-fo', file.name);
-                    var dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     dec.on('close', function () {
                         res((0, fs_1.readFileSync)(file.name));
                     });
