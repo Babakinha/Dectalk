@@ -54,7 +54,7 @@ function say(content, options) {
                     var file = (0, tmp_1.fileSync)({ prefix: 'dectalk', postfix: '.wav' });
                     var dec;
                     // Windows
-                    if ((0, node_os_1.platform)() == "win32") {
+                    if ((0, node_os_1.platform)() === "win32") {
                         var args = [];
                         if (options) {
                             if (options.EnableCommands)
@@ -70,7 +70,11 @@ function say(content, options) {
                         args.push(content);
                         dec = (0, node_child_process_1.spawn)(__dirname + '\\..\\dtalk\\windows\\say.exe', args, { cwd: __dirname + '\\..\\dtalk\\windows' });
                     }
-                    // Linux / Others
+                    // Mac is NOT supported
+                    else if ((0, node_os_1.platform)() === "darwin") {
+                        rej('Dectalk is not supported on Mac');
+                    }
+                    // Linux
                     else {
                         var args = [];
                         if (options) {

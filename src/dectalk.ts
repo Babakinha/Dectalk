@@ -64,7 +64,7 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 		
 		let dec;
 		// Windows
-		if (platform() == "win32") {
+		if (platform() === "win32") {
 			var args: string[] = [];
 			if (options) {
 				if(options.EnableCommands)
@@ -81,7 +81,11 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 
 			dec = spawn(__dirname + '\\..\\dtalk\\windows\\say.exe', args, {cwd: __dirname + '\\..\\dtalk\\windows'});
 		}
-		// Linux / Others
+		// Mac is NOT supported
+		else if (platform() === "darwin") {
+			rej('Dectalk is not supported on Mac');
+		}
+		// Linux
 		else {
 			var args: string[] = [];
 			if (options) {
