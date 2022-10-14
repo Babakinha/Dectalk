@@ -9,7 +9,32 @@ export enum WaveEncoding {
 	MULAW_8bits_MONO_8KHz = 3
 }
 
-type DecOptions = {
+/**
+ * (_Linux only_)
+ * Different settings for voices.
+ */
+export enum Speaker {
+	/** Default male voice */
+	PAUL = 0,
+	/** Default female voice */
+	BETTY = 1,
+	/** Low-pitched male voice */
+	HARRY = 2,
+	/** High-pitched hoarse male voice */
+	FRANK = 3,
+	/** Nasally male voice */
+	DENNIS = 4,
+	/** High-pitched child voice */
+	KID = 5,
+	/** High-pitched female voice */
+	URSULA = 6,
+	/** Nasally female voice */
+	RITA = 7,
+	/** Low-pitched hoarse female voice */
+	WENDY = 8
+}
+
+export type DecOptions = {
 	/**
 	 * (_Linux only_)
 	 * The encoding the wav file is
@@ -24,27 +49,16 @@ type DecOptions = {
 
 	/**
 	 * (_Linux only_)
-	 * The speed that he talks
+	 * The speed that he talks in words-per-minute
+	 * Limit is 75 to 600
 	 */
 	SpeakRate?: number,
 
 	/**
 	 * (_Linux only_)
-	 * The voice of who talks. Default is 0
-	 *
-	 * 0. Paul (male)
-	 * 1. Betty (female)
-	 * 2. Harry (male, low pitch)
-	 * 3. Frank (male, high pitch and hoarse)
-	 * 4. Dennis (male, nasally)
-	 * 5. Kid (child, high pitch)
-	 * 6. Ursula (female, high pitch)
-	 * 7. Rita (female, nasally)
-	 * 8. Wendy (female, low pitch and hoarse)
-	 *
-	 * Any other numbers defaults to the 0 voice
+	 * The voice of who talks. Default is PAUL (0)
 	 */
-	SpeakerNumber?: number,
+	Speaker?: Speaker,
 
 	/**
 	 * Enable phoname commands
@@ -93,8 +107,8 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 						args.push('-e', options.WaveEncoding.toString());
 				if(options.SpeakRate)
 						args.push('-r', options.SpeakRate.toString());
-				if(options.SpeakerNumber)
-						args.push('-s', options.SpeakerNumber.toString());
+				if(options.Speaker)
+						args.push('-s', options.Speaker.toString());
 				if(options.EnableCommands)
 						content = "[:PHONE ON]" + content;
 			} else {

@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.say = exports.WaveEncoding = void 0;
+exports.say = exports.Speaker = exports.WaveEncoding = void 0;
 var node_child_process_1 = require("node:child_process");
 var node_fs_1 = require("node:fs");
 var node_os_1 = require("node:os");
@@ -47,6 +47,31 @@ var WaveEncoding;
     WaveEncoding[WaveEncoding["PCM_8bits_MONO_11KHz"] = 2] = "PCM_8bits_MONO_11KHz";
     WaveEncoding[WaveEncoding["MULAW_8bits_MONO_8KHz"] = 3] = "MULAW_8bits_MONO_8KHz";
 })(WaveEncoding = exports.WaveEncoding || (exports.WaveEncoding = {}));
+/**
+ * (_Linux only_)
+ * Different settings for voices.
+ */
+var Speaker;
+(function (Speaker) {
+    /** Default male voice */
+    Speaker[Speaker["PAUL"] = 0] = "PAUL";
+    /** Default female voice */
+    Speaker[Speaker["BETTY"] = 1] = "BETTY";
+    /** Low-pitched male voice */
+    Speaker[Speaker["HARRY"] = 2] = "HARRY";
+    /** High-pitched hoarse male voice */
+    Speaker[Speaker["FRANK"] = 3] = "FRANK";
+    /** Nasally male voice */
+    Speaker[Speaker["DENNIS"] = 4] = "DENNIS";
+    /** High-pitched child voice */
+    Speaker[Speaker["KID"] = 5] = "KID";
+    /** High-pitched female voice */
+    Speaker[Speaker["URSULA"] = 6] = "URSULA";
+    /** Nasally female voice */
+    Speaker[Speaker["RITA"] = 7] = "RITA";
+    /** Low-pitched hoarse female voice */
+    Speaker[Speaker["WENDY"] = 8] = "WENDY";
+})(Speaker = exports.Speaker || (exports.Speaker = {}));
 function say(content, options) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -82,8 +107,8 @@ function say(content, options) {
                                 args.push('-e', options.WaveEncoding.toString());
                             if (options.SpeakRate)
                                 args.push('-r', options.SpeakRate.toString());
-                            if (options.SpeakerNumber)
-                                args.push('-s', options.SpeakerNumber.toString());
+                            if (options.Speaker)
+                                args.push('-s', options.Speaker.toString());
                             if (options.EnableCommands)
                                 content = "[:PHONE ON]" + content;
                         }
