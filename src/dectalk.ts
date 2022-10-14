@@ -75,11 +75,11 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
                         content = "[:PHONE ON]" + content;
                 }
                 args.push('-w', file.name);
-                //args.push('-d', __dirname + "/../dtalk/dtalk_us.dic");
+                //args.push('-d', __dirname + "\\..\\dtalk\\dtalk_us.dic");
                 args.push(content);
 
 
-                dec = spawn(__dirname + '/../dtalk/windows/say.exe', args, {cwd: __dirname + '/../dtalk/windows'});
+                dec = spawn(__dirname + '\\..\\dtalk\\windows\\say.exe', args, {cwd: __dirname + '\\..\\dtalk\\windows'});
         }
         //Linux / Others
         else {

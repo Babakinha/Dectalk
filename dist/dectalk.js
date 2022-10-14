@@ -66,9 +66,9 @@ function say(content, options) {
                             content = "[:PHONE ON]" + content;
                         }
                         args.push('-w', file.name);
-                        //args.push('-d', __dirname + "/../dtalk/dtalk_us.dic");
+                        //args.push('-d', __dirname + "\\..\\dtalk\\dtalk_us.dic");
                         args.push(content);
-                        dec = (0, node_child_process_1.spawn)(__dirname + '/../dtalk/windows/say.exe', args, { cwd: __dirname + '/../dtalk/windows' });
+                        dec = (0, node_child_process_1.spawn)(__dirname + '\\..\\dtalk\\windows\\say.exe', args, { cwd: __dirname + '\\..\\dtalk\\windows' });
                     }
                     //Linux / Others
                     else {
