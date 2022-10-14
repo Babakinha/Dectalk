@@ -56,53 +56,53 @@ type DecOptions = {
 	 */
 	EnableCommands?: boolean
 
-	}
+}
 
 export async function say(content:string, options?: DecOptions): Promise<Buffer> {
 	return new Promise((res, rej) => {
 		const file = makeTempFile({prefix: 'dectalk', postfix: '.wav'});
 		
 		let dec;
-		//Windows
-		if(platform() == "win32") {
-				var args: string[] = [];
-				if(options) {
-					if(options.EnableCommands)
-							content = "[:PHONE ON]" + content;
-				}else {
-					//Defaults
-					// EnableCommands
-					content = "[:PHONE ON]" + content;
-				}
-				args.push('-w', file.name);
-				//args.push('-d', __dirname + "\\..\\dtalk\\dtalk_us.dic");
-				args.push(content);
+		// Windows
+		if (platform() == "win32") {
+			var args: string[] = [];
+			if (options) {
+				if(options.EnableCommands)
+						content = "[:PHONE ON]" + content;
+			} else {
+				//Defaults
+				// EnableCommands
+				content = "[:PHONE ON]" + content;
+			}
+			args.push('-w', file.name);
+			//args.push('-d', __dirname + "\\..\\dtalk\\dtalk_us.dic");
+			args.push(content);
 
 
-				dec = spawn(__dirname + '\\..\\dtalk\\windows\\say.exe', args, {cwd: __dirname + '\\..\\dtalk\\windows'});
+			dec = spawn(__dirname + '\\..\\dtalk\\windows\\say.exe', args, {cwd: __dirname + '\\..\\dtalk\\windows'});
 		}
-		//Linux / Others
+		// Linux / Others
 		else {
-				var args: string[] = [];
-				if(options) {
-					if(options.WaveEncoding)
-							args.push('-e', options.WaveEncoding.toString());
-					if(options.SpeakRate)
-							args.push('-r', options.SpeakRate.toString());
-					if(options.SpeakerNumber)
-							args.push('-s', options.SpeakerNumber.toString());
-					if(options.EnableCommands)
-							content = "[:PHONE ON]" + content;
-				}else {
-					//Defaults
-					// EnableCommands
-					content = "[:PHONE ON]" + content;
-				}
-				args.push('-a', content);
-				args.push('-fo', file.name);
+			var args: string[] = [];
+			if (options) {
+				if(options.WaveEncoding)
+						args.push('-e', options.WaveEncoding.toString());
+				if(options.SpeakRate)
+						args.push('-r', options.SpeakRate.toString());
+				if(options.SpeakerNumber)
+						args.push('-s', options.SpeakerNumber.toString());
+				if(options.EnableCommands)
+						content = "[:PHONE ON]" + content;
+			} else {
+				//Defaults
+				// EnableCommands
+				content = "[:PHONE ON]" + content;
+			}
+			args.push('-a', content);
+			args.push('-fo', file.name);
 
 
-				dec = spawn(__dirname + '/../dtalk/linux/say_demo_us', args, {cwd: __dirname + '/../dtalk'});
+			dec = spawn(__dirname + '/../dtalk/linux/say_demo_us', args, {cwd: __dirname + '/../dtalk'});
 		}
 
 		// Reject if dectalk failed to start
@@ -116,7 +116,8 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 
 		dec.on('close', code => {
 			// Reject if dectalk was not successful
-			if (code !== 0) rej(`Dectalk exited with code ${code}`);
+			if (code !== 0)
+				rej(`Dectalk exited with code ${code}`);
 
 			res(readFileSync(file.name));
 		})

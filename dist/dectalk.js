@@ -53,7 +53,7 @@ function say(content, options) {
             return [2 /*return*/, new Promise(function (res, rej) {
                     var file = (0, tmp_1.fileSync)({ prefix: 'dectalk', postfix: '.wav' });
                     var dec;
-                    //Windows
+                    // Windows
                     if ((0, node_os_1.platform)() == "win32") {
                         var args = [];
                         if (options) {
@@ -70,7 +70,7 @@ function say(content, options) {
                         args.push(content);
                         dec = (0, node_child_process_1.spawn)(__dirname + '\\..\\dtalk\\windows\\say.exe', args, { cwd: __dirname + '\\..\\dtalk\\windows' });
                     }
-                    //Linux / Others
+                    // Linux / Others
                     else {
                         var args = [];
                         if (options) {
