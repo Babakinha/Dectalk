@@ -105,7 +105,19 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 				dec = spawn(__dirname + '/../dtalk/linux/say_demo_us', args, {cwd: __dirname + '/../dtalk'});
 		}
 
-		dec.on('close', () => {
+		// Reject if dectalk failed to start
+		dec.on('error', error => {
+			rej(`Failed to start dectalk\n${error}`);
+		});
+
+		// Redirect dectalk output to the console
+		dec.stdout.on('data', console.log);
+		dec.stderr.on('data', console.error);
+
+		dec.on('close', code => {
+			// Reject if dectalk was not successful
+			if (code !== 0) rej(`Dectalk exited with code ${code}`);
+
 			res(readFileSync(file.name));
 		})
 	}) 

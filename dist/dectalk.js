@@ -92,7 +92,17 @@ function say(content, options) {
                         args.push('-fo', file.name);
                         dec = (0, node_child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     }
-                    dec.on('close', function () {
+                    // Reject if dectalk failed to start
+                    dec.on('error', function (error) {
+                        rej("Failed to start dectalk\n" + error);
+                    });
+                    // Redirect dectalk output to the console
+                    dec.stdout.on('data', console.log);
+                    dec.stderr.on('data', console.error);
+                    dec.on('close', function (code) {
+                        // Reject if dectalk was not successful
+                        if (code !== 0)
+                            rej("Dectalk exited with code " + code);
                         res((0, node_fs_1.readFileSync)(file.name));
                     });
                 })];
