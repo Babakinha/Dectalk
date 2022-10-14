@@ -37,10 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.say = exports.WaveEncoding = void 0;
-var child_process_1 = require("child_process");
-var fs_1 = require("fs");
-var tmp = require("tmp");
-var os = require("os");
+var node_child_process_1 = require("node:child_process");
+var node_fs_1 = require("node:fs");
+var node_os_1 = require("node:os");
+var tmp_1 = require("tmp");
 var WaveEncoding;
 (function (WaveEncoding) {
     WaveEncoding[WaveEncoding["PCM_16bits_MONO_11KHz"] = 1] = "PCM_16bits_MONO_11KHz";
@@ -51,10 +51,10 @@ function say(content, options) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             return [2 /*return*/, new Promise(function (res, rej) {
-                    var file = tmp.fileSync({ prefix: 'dectalk', postfix: '.wav' });
+                    var file = (0, tmp_1.fileSync)({ prefix: 'dectalk', postfix: '.wav' });
                     var dec;
                     //Windows
-                    if (os.platform() == "win32") {
+                    if ((0, node_os_1.platform)() == "win32") {
                         var args = [];
                         if (options) {
                             if (options.EnableCommands)
@@ -68,7 +68,7 @@ function say(content, options) {
                         args.push('-w', file.name);
                         //args.push('-d', __dirname + "/../dtalk/dtalk_us.dic");
                         args.push(content);
-                        dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/windows/say.exe', args, { cwd: __dirname + '/../dtalk/windows' });
+                        dec = (0, node_child_process_1.spawn)(__dirname + '/../dtalk/windows/say.exe', args, { cwd: __dirname + '/../dtalk/windows' });
                     }
                     //Linux / Others
                     else {
@@ -90,10 +90,10 @@ function say(content, options) {
                         }
                         args.push('-a', content);
                         args.push('-fo', file.name);
-                        dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
+                        dec = (0, node_child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     }
                     dec.on('close', function () {
-                        res((0, fs_1.readFileSync)(file.name));
+                        res((0, node_fs_1.readFileSync)(file.name));
                     });
                 })];
         });

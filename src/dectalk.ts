@@ -1,7 +1,7 @@
-import { spawn } from 'child_process';
-import { readFileSync } from 'fs';
-import * as tmp from 'tmp';
-import * as os from 'os';
+import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { platform } from 'node:os';
+import { fileSync as makeTempFile } from 'tmp';
 
 export enum WaveEncoding {
     PCM_16bits_MONO_11KHz = 1,
@@ -62,11 +62,11 @@ type DecOptions = {
 
 export async function say(content:string, options?: DecOptions): Promise<Buffer> {
     return new Promise((res, rej) => {
-        const file = tmp.fileSync({prefix: 'dectalk', postfix: '.wav'});
+        const file = makeTempFile({prefix: 'dectalk', postfix: '.wav'});
         
         let dec;
         //Windows
-        if(os.platform() == "win32") {
+        if(platform() == "win32") {
                 var args: string[] = [];
                 if(options) {
                         if(options.EnableCommands)
