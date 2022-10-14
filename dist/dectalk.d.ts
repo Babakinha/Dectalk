@@ -23,19 +23,17 @@ declare type DecOptions = {
     SpeakRate?: number;
     /**
      * (_Linux only_)
-     * The voice of who talks
+     * The voice of who talks. Default is 0
      *
-     * Here is what i think they are
-     *
-     * -> 0. Default voice
-     * 1. Female voice
-     * 2. Low pitch guy
-     * 3. Another Female voice?
-     * 4. Almost Default voice (a little lower pitch)
-     * 5. Female very high pitch
-     * 6. Female high pitch (like the previouse but lower)
-     * 7. Another male voice
-     * 8. Another female voice
+     * 0. Paul (male)
+     * 1. Betty (female)
+     * 2. Harry (male, low pitch)
+     * 3. Frank (male, high pitch and hoarse)
+     * 4. Dennis (male, nasally)
+     * 5. Kid (child, high pitch)
+     * 6. Ursula (female, high pitch)
+     * 7. Rita (female, nasally)
+     * 8. Wendy (female, low pitch and hoarse)
      *
      * Any other numbers defaults to the 0 voice
      */
