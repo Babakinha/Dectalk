@@ -1,1 +1,1 @@
-export { say } from './dectalk';
+export { WaveEncoding, Speaker, DecOptions, say } from './dectalk';

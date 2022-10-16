@@ -36,25 +36,50 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.say = exports.WaveEncoding = void 0;
-var child_process_1 = require("child_process");
-var fs_1 = require("fs");
-var tmp = require("tmp");
-var os = require("os");
+exports.say = exports.Speaker = exports.WaveEncoding = void 0;
+var node_child_process_1 = require("node:child_process");
+var node_fs_1 = require("node:fs");
+var node_os_1 = require("node:os");
+var tmp_1 = require("tmp");
 var WaveEncoding;
 (function (WaveEncoding) {
     WaveEncoding[WaveEncoding["PCM_16bits_MONO_11KHz"] = 1] = "PCM_16bits_MONO_11KHz";
     WaveEncoding[WaveEncoding["PCM_8bits_MONO_11KHz"] = 2] = "PCM_8bits_MONO_11KHz";
     WaveEncoding[WaveEncoding["MULAW_8bits_MONO_8KHz"] = 3] = "MULAW_8bits_MONO_8KHz";
 })(WaveEncoding = exports.WaveEncoding || (exports.WaveEncoding = {}));
+/**
+ * (_Linux only_)
+ * Different settings for voices.
+ */
+var Speaker;
+(function (Speaker) {
+    /** Default male voice */
+    Speaker[Speaker["PAUL"] = 0] = "PAUL";
+    /** Default female voice */
+    Speaker[Speaker["BETTY"] = 1] = "BETTY";
+    /** Low-pitched male voice */
+    Speaker[Speaker["HARRY"] = 2] = "HARRY";
+    /** High-pitched hoarse male voice */
+    Speaker[Speaker["FRANK"] = 3] = "FRANK";
+    /** Nasally male voice */
+    Speaker[Speaker["DENNIS"] = 4] = "DENNIS";
+    /** High-pitched child voice */
+    Speaker[Speaker["KID"] = 5] = "KID";
+    /** High-pitched female voice */
+    Speaker[Speaker["URSULA"] = 6] = "URSULA";
+    /** Nasally female voice */
+    Speaker[Speaker["RITA"] = 7] = "RITA";
+    /** Low-pitched hoarse female voice */
+    Speaker[Speaker["WENDY"] = 8] = "WENDY";
+})(Speaker = exports.Speaker || (exports.Speaker = {}));
 function say(content, options) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             return [2 /*return*/, new Promise(function (res, rej) {
-                    var file = tmp.fileSync({ prefix: 'dectalk', postfix: '.wav' });
+                    var file = (0, tmp_1.fileSync)({ prefix: 'dectalk', postfix: '.wav' });
                     var dec;
-                    //Windows
-                    if (os.platform() == "win32") {
+                    // Windows
+                    if ((0, node_os_1.platform)() === "win32") {
                         var args = [];
                         if (options) {
                             if (options.EnableCommands)
@@ -66,11 +91,15 @@ function say(content, options) {
                             content = "[:PHONE ON]" + content;
                         }
                         args.push('-w', file.name);
-                        //args.push('-d', __dirname + "/../dtalk/dtalk_us.dic");
+                        //args.push('-d', __dirname + "\\..\\dtalk\\dtalk_us.dic");
                         args.push(content);
-                        dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/windows/say.exe', args, { cwd: __dirname + '/../dtalk/windows' });
+                        dec = (0, node_child_process_1.spawn)(__dirname + '\\..\\dtalk\\windows\\say.exe', args, { cwd: __dirname + '\\..\\dtalk\\windows' });
                     }
-                    //Linux / Others
+                    // Mac is NOT supported
+                    else if ((0, node_os_1.platform)() === "darwin") {
+                        rej('Dectalk is not supported on Mac');
+                    }
+                    // Linux
                     else {
                         var args = [];
                         if (options) {
@@ -78,8 +107,8 @@ function say(content, options) {
                                 args.push('-e', options.WaveEncoding.toString());
                             if (options.SpeakRate)
                                 args.push('-r', options.SpeakRate.toString());
-                            if (options.SpeakerNumber)
-                                args.push('-s', options.SpeakerNumber.toString());
+                            if (options.Speaker)
+                                args.push('-s', options.Speaker.toString());
                             if (options.EnableCommands)
                                 content = "[:PHONE ON]" + content;
                         }
@@ -90,10 +119,20 @@ function say(content, options) {
                         }
                         args.push('-a', content);
                         args.push('-fo', file.name);
-                        dec = (0, child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
+                        dec = (0, node_child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     }
-                    dec.on('close', function () {
-                        res((0, fs_1.readFileSync)(file.name));
+                    // Reject if dectalk failed to start
+                    dec.on('error', function (error) {
+                        rej("Failed to start dectalk\n" + error);
+                    });
+                    // Redirect dectalk output to the console
+                    dec.stdout.on('data', console.log);
+                    dec.stderr.on('data', console.error);
+                    dec.on('close', function (code) {
+                        // Reject if dectalk was not successful
+                        if (code !== 0)
+                            rej("Dectalk exited with code " + code);
+                        res((0, node_fs_1.readFileSync)(file.name));
                     });
                 })];
         });

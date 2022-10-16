@@ -37,6 +37,11 @@ import { say } from 'dectalk';
 Windows support was added recently, 
 if you have any problems dont be afraid to make an issue
 
+### Mac
+Unfortunately, Dectalk does not support macOS.
+If you would like to use this module on Mac, try running your project
+inside a Linux [Docker](https://www.docker.com/) container.
+
 ### Linux
 On my arch linux server (x86_64)
 i had to install some dependencies

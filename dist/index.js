@@ -7,6 +7,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-exports.say = void 0;
+exports.say = exports.Speaker = exports.WaveEncoding = void 0;
 var dectalk_1 = require("./dectalk");
+__createBinding(exports, dectalk_1, "WaveEncoding");
+__createBinding(exports, dectalk_1, "Speaker");
 __createBinding(exports, dectalk_1, "say");

@@ -4,7 +4,31 @@ export declare enum WaveEncoding {
     PCM_8bits_MONO_11KHz = 2,
     MULAW_8bits_MONO_8KHz = 3
 }
-declare type DecOptions = {
+/**
+ * (_Linux only_)
+ * Different settings for voices.
+ */
+export declare enum Speaker {
+    /** Default male voice */
+    PAUL = 0,
+    /** Default female voice */
+    BETTY = 1,
+    /** Low-pitched male voice */
+    HARRY = 2,
+    /** High-pitched hoarse male voice */
+    FRANK = 3,
+    /** Nasally male voice */
+    DENNIS = 4,
+    /** High-pitched child voice */
+    KID = 5,
+    /** High-pitched female voice */
+    URSULA = 6,
+    /** Nasally female voice */
+    RITA = 7,
+    /** Low-pitched hoarse female voice */
+    WENDY = 8
+}
+export declare type DecOptions = {
     /**
      * (_Linux only_)
      * The encoding the wav file is
@@ -23,23 +47,9 @@ declare type DecOptions = {
     SpeakRate?: number;
     /**
      * (_Linux only_)
-     * The voice of who talks
-     *
-     * Here is what i think they are
-     *
-     * -> 0. Default voice
-     * 1. Female voice
-     * 2. Low pitch guy
-     * 3. Another Female voice?
-     * 4. Almost Default voice (a little lower pitch)
-     * 5. Female very high pitch
-     * 6. Female high pitch (like the previouse but lower)
-     * 7. Another male voice
-     * 8. Another female voice
-     *
-     * Any other numbers defaults to the 0 voice
+     * The voice of who talks. Default is PAUL (0)
      */
-    SpeakerNumber?: number;
+    Speaker?: Speaker;
     /**
      * Enable phoname commands
      *
@@ -51,4 +61,3 @@ declare type DecOptions = {
     EnableCommands?: boolean;
 };
 export declare function say(content: string, options?: DecOptions): Promise<Buffer>;
-export {};
