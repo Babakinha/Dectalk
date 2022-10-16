@@ -42,7 +42,8 @@ export declare type DecOptions = {
     WaveEncoding?: WaveEncoding;
     /**
      * (_Linux only_)
-     * The speed that he talks
+     * The speed that he talks in words-per-minute
+     * Limit is 75 to 600
      */
     SpeakRate?: number;
     /**
