@@ -43,11 +43,11 @@ If you would like to use this module on Mac, try running your project
 inside a Linux [Docker](https://www.docker.com/) container.
 
 ### Linux
-On my arch linux server (x86_64)
-i had to install some dependencies
+On Linux, you may have to install a dependency:
 ```sh-session
-yay -S gcc-multilib lib32-glibc
+yay -S libpulse0
 ```
-since i was running 64-bit and the binary is 32-bit
-
-but on ubuntu i didnt (it must have them pre installed)
+or
+```sh-session
+apt install libpulse0
+```
