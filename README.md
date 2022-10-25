@@ -45,9 +45,9 @@ inside a Linux [Docker](https://www.docker.com/) container.
 ### Linux
 On Linux, you may have to install a dependency:
 ```sh-session
-yay -S libpulse0
+apt install libpulse0
 ```
 or
 ```sh-session
-apt install libpulse0
+pacman -S libpulse
 ```
