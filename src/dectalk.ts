@@ -134,8 +134,11 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 
 		dec.on('close', code => {
 			// Reject if dectalk was not successful
-			if (code !== 0)
+			if (code !== 0){
 				rej(`Dectalk exited with code ${code}`);
+
+				return;
+			}
 
 			res(readFileSync(file.name));
 		})
