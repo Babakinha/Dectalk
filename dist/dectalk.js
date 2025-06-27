@@ -130,8 +130,10 @@ function say(content, options) {
                     dec.stderr.on('data', console.error);
                     dec.on('close', function (code) {
                         // Reject if dectalk was not successful
-                        if (code !== 0)
+                        if (code !== 0) {
                             rej("Dectalk exited with code " + code);
+                            return;
+                        }
                         res((0, node_fs_1.readFileSync)(file.name));
                     });
                 })];
