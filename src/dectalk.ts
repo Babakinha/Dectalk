@@ -98,6 +98,8 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 		// Mac is NOT supported
 		else if (platform() === "darwin") {
 			rej('Dectalk is not supported on Mac');
+
+			return;
 		}
 		// Linux
 		else {
@@ -123,9 +125,17 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 			dec = spawn(__dirname + '/../dtalk/linux/say_demo_us', args, {cwd: __dirname + '/../dtalk'});
 		}
 
+		let exited = false;
+
 		// Reject if dectalk failed to start
 		dec.on('error', error => {
+			if(exited){
+				return;
+			}
+
 			rej(`Failed to start dectalk\n${error}`);
+
+			exited = true;
 		});
 
 		// Redirect dectalk output to the console
@@ -133,11 +143,20 @@ export async function say(content:string, options?: DecOptions): Promise<Buffer>
 		dec.stderr.on('data', console.error);
 
 		dec.on('close', code => {
+			if(exited){
+				return;
+			}
+
 			// Reject if dectalk was not successful
-			if (code !== 0)
+			if (code !== 0){
 				rej(`Dectalk exited with code ${code}`);
 
+				return;
+			}
+
 			res(readFileSync(file.name));
+			
+			exited = true;
 		})
 	}) 
 }

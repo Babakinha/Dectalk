@@ -98,6 +98,7 @@ function say(content, options) {
                     // Mac is NOT supported
                     else if ((0, node_os_1.platform)() === "darwin") {
                         rej('Dectalk is not supported on Mac');
+                        return;
                     }
                     // Linux
                     else {
@@ -121,18 +122,29 @@ function say(content, options) {
                         args.push('-fo', file.name);
                         dec = (0, node_child_process_1.spawn)(__dirname + '/../dtalk/linux/say_demo_us', args, { cwd: __dirname + '/../dtalk' });
                     }
+                    var exited = false;
                     // Reject if dectalk failed to start
                     dec.on('error', function (error) {
+                        if (exited) {
+                            return;
+                        }
                         rej("Failed to start dectalk\n" + error);
+                        exited = true;
                     });
                     // Redirect dectalk output to the console
                     dec.stdout.on('data', console.log);
                     dec.stderr.on('data', console.error);
                     dec.on('close', function (code) {
+                        if (exited) {
+                            return;
+                        }
                         // Reject if dectalk was not successful
-                        if (code !== 0)
+                        if (code !== 0) {
                             rej("Dectalk exited with code " + code);
+                            return;
+                        }
                         res((0, node_fs_1.readFileSync)(file.name));
+                        exited = true;
                     });
                 })];
         });
